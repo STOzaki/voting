@@ -18,7 +18,6 @@ import org.json.simple.parser.ParseException;
  * @author sozaki19
  */
 public class Voting {
-    JSONParser parser = new JSONParser();
-
+    
         
 }

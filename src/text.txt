@@ -1,0 +1,26 @@
+[  
+    {  
+        "Position":"President",
+        "Candidates":["Jacky","Jason"]
+    },
+    {  
+        "Position":"Vice President",
+        "Candidates":["Jason","Jacky","Axe"]
+    },
+    {
+        "Position":"Treasurer",
+        "Candidates":["Savannah"]
+    },
+    {
+        "Position":"Secretary",
+        "Candidates":["Emma"]
+    },
+    {
+        "Position":"Public Relations"
+        "Candidates":["Zack"]
+    },
+    {
+        "Position":"Events Coordinator"
+        "Candidates":["Jason"]
+    }
+]

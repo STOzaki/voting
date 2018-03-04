@@ -5,10 +5,14 @@
  */
 package voting;
 
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -32,7 +36,7 @@ public class votingFrame extends javax.swing.JFrame {
     int position = 0;
     int numVoters = 0;
     boolean waitNextVoter = false;
-    char[] admin = {'T','a','d','a','t','a','k','a','1','0','1'};
+    char[] admin = {'I','l','i','k','e','p','i','e'};
     boolean others = true; // whether to have others or not
     
     /**
@@ -42,6 +46,47 @@ public class votingFrame extends javax.swing.JFrame {
         initComponents();
     }
     
+    private void initCand(){
+        // takes the given JSON file and grab all of the candidates and
+        // position.
+        JSONParser parser = new JSONParser();
+
+        try {     
+            JSONArray a = (JSONArray) parser.parse(new FileReader("./text.txt"));
+                int i = 0;
+                int j;
+              for (Object o : a)
+              {
+
+                JSONObject person = (JSONObject) o;
+
+                String title = (String) person.get("Position");
+                list[i][0] = title;
+//                jLabel1.setText(title + ":");
+//                System.out.println(title+":");
+
+                JSONArray pos = (JSONArray) person.get("Candidates");
+
+                // skip over the position name.
+                j = 1;
+                
+                // returns all candidates for this position
+                for (Object p : pos) {
+                    list[i][j] = p+"";
+                    j++;
+                }
+                i++;
+              }
+
+              jLabel1.setText(list[0][0]);
+              jList1.setListData(candidate(list[0]));
+
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+        } catch (IOException | ParseException e) {
+            System.out.println(e);
+        }
+    }
     
     private void voting(int cand){
         // votes for the candidate
@@ -71,17 +116,28 @@ public class votingFrame extends javax.swing.JFrame {
         
     }
     
-    private void printAllOthers(){
+    private void printAll() throws IOException{
+        String message = "";
         for(int i = 0; i < POSITIONS; i++){
             if(list[i][0] != null){
                 System.out.println(list[i][0] + ":");
+                message = message + "\n" + list[i][0] + ":\n";
+                
             } // if
                 for(int j = 1; j < CANDIDATES; j++){
                     if(list[i][j] != null){
                         System.out.println(list[i][j] + " has " + votes[i][j] + " votes.");
+                        message = message + list[i][j] + " has " + votes[i][j] + " votes.\n";
                     } // if
             } // for
         } // for
+        try {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("./votes.txt"))) {
+                writer.write(message);
+            } // try writing to a file
+        } catch(IOException e) {
+            System.out.println("Could not find that file!");
+        } // catch
     } // printAllOthers
     
     private boolean matchingPass(char[] pass){
@@ -153,11 +209,6 @@ public class votingFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jOther1.setText("other");
-        jOther1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jOther1KeyReleased(evt);
-            }
-        });
 
         vote.setText("vote");
         vote.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -182,12 +233,7 @@ public class votingFrame extends javax.swing.JFrame {
             }
         });
 
-        jPass1.setText("Tadataka101");
-        jPass1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPass1ActionPerformed(evt);
-            }
-        });
+        jPass1.setText("something long");
 
         totalVoters.setText("0 have voted.");
 
@@ -260,10 +306,6 @@ public class votingFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jOther1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jOther1KeyReleased
-        //JList<String> list = new JList<String> (list);
-    }//GEN-LAST:event_jOther1KeyReleased
-
     private void voteMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_voteMousePressed
         
         if(waitNextVoter){
@@ -288,7 +330,11 @@ public class votingFrame extends javax.swing.JFrame {
                 if(others){
                     // if we want this option
                     
+                    // convert the name into all lower case
                     String nameCand = jOther1.getText().toLowerCase();
+                    
+                    // then captialize the first letter
+                    nameCand = nameCand.substring(0, 1).toUpperCase() + nameCand.substring(1);
 
                     // Starting position of the other section
                     int otherPos = candidate(list[position]).length + 2;
@@ -384,74 +430,8 @@ public class votingFrame extends javax.swing.JFrame {
                 starting = false;
                 jPass1.setText("Something long");
                 begining.setText("End");
-                JSONParser parser = new JSONParser();
 
-                try {     
-                    JSONArray a = (JSONArray) parser.parse(new FileReader("text.txt"));
-                        int i = 0;
-                        int j = 0;
-                      for (Object o : a)
-                      {
-
-                        JSONObject person = (JSONObject) o;
-
-                        String title = (String) person.get("Position");
-                        list[i][0] = title;
-        //                jLabel1.setText(title + ":");
-        //                System.out.println(title+":");
-
-                        JSONArray position = (JSONArray) person.get("Candidates");
-
-                        j = 1;
-                        // returns all candidates for this position
-                        for (Object p : position) {
-                            list[i][j] = p+"";
-                            j++;
-        //                  System.out.println(p);
-                        }
-        //                jList1.setListData(list[i]);
-                        i++;
-                      }
-
-                      jLabel1.setText(list[0][0]);
-                      jList1.setListData(candidate(list[0]));
-
-
-        //                for(i = 0; i<10;i++){
-        //                    System.out.println(list[i][0]);
-        //                }
-
-        /*
-                        i = 0;
-                        j = 0;
-                        while(true){
-                            if(list[i][j] != null){
-                                while(true){
-                                    if(list[i][j] != null){
-                                        System.out.println(list[i][j]);
-                                        j++;
-                                    } else {
-        //                                System.out.println(i + " " + j);
-                                        i++;
-                                        j = 0;
-                                        break;
-                                    } // else
-                                }
-                            } else {
-                                break;
-                            } // else
-
-                            } // while
-
-        */
-
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                initCand();
             } else {
                 // finished voting
                 System.out.println("");
@@ -459,7 +439,13 @@ public class votingFrame extends javax.swing.JFrame {
                 System.out.println("");
                 System.out.println("");
                 System.out.println("All Done!");
-                printAllOthers();
+                try {
+                    printAll();
+                } catch (IOException ex) {
+                    Logger.getLogger(votingFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                setVisible(false); //you can't see me!
+                dispose(); //Destroy the JFrame object
             }
 
         } else {
@@ -468,18 +454,6 @@ public class votingFrame extends javax.swing.JFrame {
             
     }//GEN-LAST:event_beginingMouseClicked
 
-    private void jPass1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPass1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jPass1ActionPerformed
-
-    
-//    private String[] naming(JSONArray a){
-//        String[] list = new String[a.size()];
-//        int count = 0;
-//        
-//        listing.setListData(naming(a));
-//        return list;
-//    }
     
     /**
      * @param args the command line arguments

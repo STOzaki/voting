@@ -108,9 +108,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="other"/>
       </Properties>
-      <Events>
-        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jOther1KeyReleased"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="vote">
       <Properties>
@@ -156,11 +153,8 @@
     </Component>
     <Component class="javax.swing.JPasswordField" name="jPass1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Tadataka101"/>
+        <Property name="text" type="java.lang.String" value="something long"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jPass1ActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="totalVoters">
       <Properties>
