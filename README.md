@@ -1,6 +1,5 @@
 # Voting
-This will help you with voting.
-
+Mimics voting through a ballot with a graphic interface. Designed in Java with their javaframe.
 
 ## Execute Program
 1. On your terminal, go into the executable directory and then write the command "chmod u+x voting.jar".  This will give only you the ability to execute the voting.jar.
